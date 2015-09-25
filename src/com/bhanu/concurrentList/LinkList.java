@@ -3,13 +3,14 @@ package com.bhanu.concurrentList;
 public class LinkList {
 
 	Node head;
-	int size; 
+	int size;
+
 	public LinkList() {
 		head = null;
 		size = 0;
 	}
 
-// adding new element at last
+	// adding new element at last
 	public void add(int data) {
 		if (head == null) {
 			head = new Node(data);
@@ -17,6 +18,7 @@ public class LinkList {
 			add(head, data);
 		}
 	}
+
 	public void add(Node node, int data) {
 		Node temp;
 		while (node.left != null) {
@@ -60,21 +62,23 @@ public class LinkList {
 		linkList.read();
 
 		System.out.println("Deleting ");
-		
+
 		linkList.delete(-1);
 		linkList.read();
 		System.out.println("Adding again");
 		linkList.add(2, 1000);
-		System.out.println("Now reading" );
+		System.out.println("Now reading");
 		linkList.read();
 	}
 
 	// this is element locked version of linkList
 	private void delete(Node head, int data) {
-		
+
 		while (head != null) {
-			// here the node is having left , right elements . So I am assuming if I lock this 
-			// head object , then the left and right pointers will also be locked.
+			// here the node is having left , right elements . So I am assuming
+			// if I lock this
+			// head object , then the left and right pointers will also be
+			// locked.
 			synchronized (head) {
 				if (head.data == data) {
 					Node rightTemp, leftTemp;
@@ -93,36 +97,37 @@ public class LinkList {
 		delete(head, data);
 		size--;
 	}
-	
-	public void add(int index , int data){
-		if(index >-1 && index < size){
-			add(head, index , data);
-		}else if(index == size){
-			add(head , data);
-			
-		}else{
+
+	public void add(int index, int data) {
+		if (index > -1 && index < size) {
+			add(head, index, data);
+		} else if (index == size) {
+			add(head, data);
+
+		} else {
 			System.out.println("Sorry can`t add element ");
 		}
 	}
-	
-	public void add(Node head , int index , int data){
-		int i=0;
-		while(i<=index ){
+
+	public void add(Node head, int index, int data) {
+		int i = 0;
+		while (i <= index) {
 			head = head.left;
-			i++;		
+			i++;
 		}
 
-		// here the node is having left , right elements . So I am assuming if I lock this 
+		// here the node is having left , right elements . So I am assuming if I
+		// lock this
 		// head object , then the left and right pointers will also be locked.
 		synchronized (head) {
-			Node tempRight , tempLeft , temp;
-			tempLeft  = head;
+			Node tempRight, tempLeft, temp;
+			tempLeft = head;
 			tempRight = head.right;
 			temp = new Node(data);
 			tempRight.left = temp;
 			temp.right = tempLeft;
-			temp.left=tempLeft;
+			temp.left = tempLeft;
 		}
-		
+
 	}
 }
